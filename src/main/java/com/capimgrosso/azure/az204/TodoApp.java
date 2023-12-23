@@ -26,6 +26,8 @@ public class TodoApp {
     private static final String partitionKey = "name";
     @ConfigProperty(name = "cosmos.key")
     String key;
+    @ConfigProperty(name = "app.hostname")
+    String appHostname;
 
     List<Task> taskList = new ArrayList<>();
     CosmosClient cosmosClient;
@@ -77,7 +79,7 @@ public class TodoApp {
     public Response addTask(Task task){
         var container = getContainer("tasks");
         container.createItem(task);
-        URI uri = URI.create("http://localhost:8080/tasks/" + task.getId());
+        URI uri = URI.create("http://%s/tasks/%s".formatted(appHostname, task.getId()));
         return Response.created(uri).build();
     }
 }
