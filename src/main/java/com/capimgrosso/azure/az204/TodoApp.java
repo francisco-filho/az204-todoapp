@@ -15,6 +15,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -81,5 +82,11 @@ public class TodoApp {
         container.createItem(task);
         URI uri = URI.create("http://%s/tasks/%s".formatted(appHostname, task.getId()));
         return Response.created(uri).build();
+    }
+
+    @POST
+    @Path("/error")
+    public Response triggerError(Map<String, String> error){
+        throw new RuntimeException("Triggered a Error: " + error.get("msg"));
     }
 }
